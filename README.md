@@ -12,7 +12,7 @@ In this case, we will try to forecast the **minimum** and **maximum** temperatur
 
 As we all know, [climate change](https://www.un.org/en/sections/issues-depth/climate-change/) is a huge problem we all have been suffering from since the last decade. The temperature are constantly rising, which creates abnormals changes that affect the ecosystem. Consequently, these changes impact the stations; longer and warmer periods and shorter but inconsistent cold periods. 
 
-To name a few of the consequences of this change, we can see how some species are on the verge of extinction, others, are forced to migrate elsewhere, breaking the balance of the local fauna. Plants experience a change in their life cycle, causing crops to fail, or in the worst case, to be completely lost due to an extremely cold late winter, or an extraordinarily hot early summer. Not to mention the increase in weather phenomena that we've experienced over the last century.  
+To name a few of the consequences of this change, we can see how some species are on the verge of extinction, others, are forced to migrate elsewhere, breaking the balance of the local fauna. Plants experience a change in their life cycle, causing crops to fail, or in the worst case, to be completely lost due to an extremely cold late winter, or an extraordinarily hot early summer. Not to mention the increase in weather phenomena that we've experienced over the last 20 years.  
 
 Being the Madrid the city where I currently live since 2009, I can tell the summers are warmer than previous, but mainly, the winters aren't colder as they used to be. The objective is to **forecast** the max/min temperatures from the MADRID AEROPUERTO station, to see if the rising trend will hold for the coming years.
 
@@ -43,7 +43,7 @@ When we see the higher and lower record of daily, monthly and yearly temperature
 
 The plots of the series, we see a *seasonal time series* in both graphs, with no clear trend, neither the actual data or the rolling mean, calculated on a window of 12 months.
 
-But when we calculate the year rolling mean for the minimum and maximum data, with a window of 5 years, we see that both higher temperatures and the lowest maximum average temperature have a clear rising trend, which confirms the fact that temperatures are rising.
+But when we calculate the year rolling mean for the minimum and maximum data, with a window of 5 years, we see that both higher temperatures and the lowest maximum average temperature have a clear rising trend, which confirms the fact that temperatures are rising. All plots can be seen in the notebook.
 
 ## 4. Exporatory data analysis
 
@@ -51,3 +51,31 @@ But when we calculate the year rolling mean for the minimum and maximum data, wi
 
 To begin with, we must verify if the time series are stationary, once we apply the Augmented Dickey-Fuller test in both, we can affirm with **_99% confidence_** that they are, as both scored a less than 0.01 p-value. The results of the test can be seen in the notebook.
 
+### Decomposition and ACF plots
+
+Being a seasonal time series, in *statsmodel* package we can decompose the series in it's 3 main parts: *Trend*, *Seasonality*, and *Residuals*, to ensure our assumptions are correct.
+
+* In both series, there's no clear trend.
+* In both series, as we've seen before, there's a clear seasonality.
+* In both series, the residuals follow the *white Gaussian noise* pattern, as we cannot see any obvious structure. 
+
+Although we've already seen that the seasonality is annual, with the AFC plot we confirm that both time series follows a twelve-lag pattern. Both plots can be seen in the notebook.
+
+## 5. Model development
+
+### Train/test series split
+
+First, the data for both dataset was split in train and test, leaving the data from the 1990-2014 period for training, and the data from the 2015-2019 period to validate the model.
+
+### SARIMA model order lookup
+
+For this time series task, we've used a SARIMA (Seasonal Autoregressive Moving Average) model. To find the order for both seasonal and non-seasonal autoregressive, integrating difference, and moving average algorithms, which compose the ARIMA model. We've already found the seasonal cycle (12).
+
+Using the *auto_arima* function of the python package **_pmdarima_**, which loops through different combinations of model orders, and returns the best-scored model. In this case, the **AIC** (Akaike information criterion) score was selected as the metric. The best set of orders was the following:
+
+```python
+modelMinTemp = SARIMAX(1, 0, 3)x(1, 1, [1], 12)
+modelMaxTemp = SARIMAX(2, 0, 3)x(0, 1, [1], 12)
+```
+
+Both models residuals are NOT normally distributed (Jarque-Vera p-value 0.07/0.37 respectively) and NOT auto-correlated (Ljung-Box p-value 1.00/0.21 respectively). As a side note, in the diagnostic plot, the residuals, KDE histogram, and correlogram looks as expected, except the Q-Q plot, which has some points outside the line.

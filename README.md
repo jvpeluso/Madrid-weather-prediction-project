@@ -30,20 +30,24 @@ As is pointless to forecast daily temperatures, the dataframe was resampled to m
 
 ### General overview
 
-The datasets statistics tell us, the STD of the maximum temperatures is higher than the minimum one, which indicates the temperature fluctuations more prominent.
-
-When we see the higher and lower record of daily, monthly and, yearly temperatures we note the following:
+The datasets statistics tell us, the STD of the maximum temperatures is higher than the minimum one, which indicates the temperature fluctuations more prominent. When we see the higher and lower record of daily, monthly and, yearly temperatures we note the following:
 
 * Coldest temperatures happened all before 2001.
 * Warmest month and year occur in 2015, except the hottest day ever recorded, which happened in July 1995.
 * The warmest minimum temperatures all happened in the 2010s decade.
 * The coldest maximum temperatures for month and year occur before 2001,  except the coldest maximum temperature ever recorded, which happened in January 2010.
 
+All of this statistics can be seen in the notebook.
+
 ### Data visualization
 
 The plots of the series, we see a *seasonal time series* in both graphs, with no clear trend, neither the actual data or the rolling mean, calculated on a 12 months window.
 
-But when we calculate the year rolling mean for the minimum and maximum data, with a window of 5 years, we see that both higher temperatures and the lowest maximum average temperature have a clear rising trend, which confirms the fact that temperatures are rising. 
+![](https://i.imgur.com/TEcMUcO.png)
+
+But when we calculate the year rolling mean for the minimum and maximum data, with a window of 5 years, we see that both higher temperatures and the lowest maximum average temperature have a clear rising trend, which confirms the fact that temperatures are rising.
+
+![](https://i.imgur.com/WsvQrxb.png)
 
 ## 4. Exploratory data analysis
 
@@ -55,11 +59,15 @@ To begin with, we must verify if the time series are stationary, we've applied t
 
 Being a seasonal time series, in the *statsmodel* package we can decompose the series in it's 3 main parts: *Trend*, *Seasonality*, and *Residuals*, to ensure our assumptions are correct.
 
+![](https://i.imgur.com/Ip5yqiS.png)
+
 * In both series, there's no clear trend.
 * In both series, as we've seen before, there's a clear seasonality.
 * In both series, the residuals follow the *white Gaussian noise* pattern, as we cannot see any obvious structure. 
 
 Although we've already seen that the seasonality is annual, with the AFC plot we confirm that both time series follow a twelve-lag pattern.
+
+![](https://i.imgur.com/69hXuk6.png)
 
 ## 5. Model development
 
@@ -93,9 +101,17 @@ modelMaxTemp MAE = 1.4293
 ```
 When we've plotted the forecast against the real data, we see that the predictions are reasonably accurate and that almost all real values fall inside the 95% confidence interval range.
 
+![](https://i.imgur.com/EnziOsd.png)
+
 ### Future predictions
 
-Finally, we've made predictions for the 2020-2024 period (60 months), and although there are no clear indications that the trend holds when we see the plot, if we calculate the difference per month, of the last-year prediction minus the first one, we see that the trend holds. 
+Finally, we've made predictions for the 2020-2024 period (60 months), and although there are no clear indications that the trend holds when we see the plot.
+
+![](https://i.imgur.com/oNDTUOs.png)
+
+But if we calculate the difference per month, of the last-year prediction minus the first one, we see that the trend holds. 
+
+![](https://i.imgur.com/TvdS5nw.png)
 
 Having seen the bar plot, we draw the following conclusions:
 
@@ -104,7 +120,7 @@ Having seen the bar plot, we draw the following conclusions:
 * April shows a drastic fall of almost **_0.3°C_** which, along with the March rise, indicates a warm winter end and a cold spring beginning.
 * 7 out of 12 months maximum temperature rise. Oddly enough, the warmest months of the year (July and August) decreases.
 * February and June show an increase of **_0.4°C_** of the maximum temperature over five years, a concerning fact since February (**_0.46°C_** rise) is one of the coldest months of the year.
-* In addition to the above mentioned July and August, April and November also show decreases, the most noticeable being again April, with almost **_0.2°C_** loss. 
+* In addition to the above mentioned July and August, April and November minimum temperatures also decrease being most noticeable again April, with almost  **_0.2°C_** loss. 
 * If we put together that, May and June rise, July and August decrease and September and October rise again, we will have summer high temperatures for almost 6 months!
 
 ## 7. Conclusions and final thoughts.

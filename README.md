@@ -18,7 +18,7 @@ Being the Madrid the city where I currently live since 2009, I can tell the summ
 
 ## 2. Data load, formatting and inspection.
 
-We access the *AEMET* data via API, via API, request the *daily temperature records* of the period 1990 - 2019 from the *MADRID AEROPUERTO* station. The information is retrieved in JSON format, loaded into a Pandas dataframe and filtered to have finally the columns we're interested in:
+We access the *AEMET* data via **API**, and request the *daily temperature records* of the period 1990 - 2019 from the *MADRID AEROPUERTO* station. The information is retrieved in JSON format, loaded into a Pandas dataframe and filtered to have finally the columns we're interested in:
 
 + **_fecha_**: Date of the measure, index of the dataframe.
 + **_tmin_**: Minimum temperature registered that day.
@@ -30,7 +30,7 @@ As is pointless to forecast daily temperatures, the dataframe was resampled to m
 
 ### General overview
 
-The datasets statistics tell us, the STD of the maximum temperatures is higher than the minimum one, which indicates the temperature fluctuations more prominent. When we see the higher and lower record of daily, monthly and, yearly temperatures we note the following:
+The datasets statistics tell us, the STD of the maximum temperatures is higher than the minimum one, which indicates the temperature fluctuations are more prominent. When we see the higher and lower record of daily, monthly and, yearly temperatures we note the following:
 
 * Coldest temperatures happened all before 2001.
 * Warmest month and year occur in 2015, except the hottest day ever recorded, which happened in July 1995.
